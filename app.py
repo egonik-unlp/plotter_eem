@@ -53,7 +53,7 @@ if uploaded_files:
 		
 		plt.rcParams.update(
 			{ 
-				'font.size':40
+				'font.size':80
 			}
 		)
 		plt.style.use('ggplot')
@@ -73,8 +73,8 @@ if uploaded_files:
 				ax_cont=np.array([ax_cont])
 			for n,tuple in enumerate(arrays):
 				ax_cont[n].contourf(*tuple, cmap=cmap)
-				ax_cont[n].set_xlabel(r"$\lambda $ de emisión")
-				ax_cont[n].set_ylabel(r"$\lambda $ de excitación")
+				ax_cont[n].set_xlabel(r"$\lambda $ de emisión (nm)")
+				ax_cont[n].set_ylabel(r"$\lambda $ de excitación (nm)")
 				ax_cont[n].set_title(titulos_graficos[n])
 			plt.tight_layout()
 	
@@ -87,8 +87,8 @@ if uploaded_files:
 				ax_srf=fig_srf.add_subplot(int('{}{}{}'.format(nrows, len(dataframes),n+1 )), projection='3d')
 				ax_srf.view_init(altura, az)
 				ax_srf.plot_surface(*tuple, cmap=cmap)
-				ax_srf.set_xlabel(r"$\lambda $ de emisión")
-				ax_srf.set_ylabel(r"$\lambda $ de excitación")
+				ax_srf.set_xlabel(r"$\lambda $ de emisión (nm)")
+				ax_srf.set_ylabel(r"$\lambda $ de excitación (nm)")
 			plt.tight_layout()
 			plot = st.pyplot(fig_srf)
 			down_srf=download(fig_srf)
