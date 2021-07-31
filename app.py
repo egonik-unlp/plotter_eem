@@ -33,7 +33,7 @@ if uploaded_files:
 	if st.sidebar.button('Generar gráficos'):
 		plt.rcParams.update(
 			{ 
-				'font.size':30
+				'font.size':40
 			}
 		)
 		plt.style.use('ggplot')
@@ -44,7 +44,7 @@ if uploaded_files:
 		nrows=int(np.ceil(nplots/3))
 		figsize=20*nplots,15*(int(np.ceil(nplots/3)))
 		if cnt:
-			fig_cont, ax_cont = plt.subplots(ncols= len(dataframes), nrows=nrows,figsize=figsize)
+			fig_cont, ax_cont = plt.subplots(ncols= len(dataframes), nrows=nrows,figsize=figsize, dpi=400)
 			if len(arrays)>1:
 				ax_con=ax_cont.flatten()
 			else:
@@ -57,7 +57,7 @@ if uploaded_files:
 			plt.tight_layout()
 			plot = st.pyplot(fig_cont)
 		if srf:
-			fig_srf= plt.Figure(figsize= figsize)
+			fig_srf= plt.Figure(figsize= figsize, dpi=400)
 		
 			for n,tuple in enumerate(arrays):
 				ax_srf=fig_srf.add_subplot(int('{}{}{}'.format(nrows, len(dataframes),n+1 )), projection='3d')
