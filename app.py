@@ -28,7 +28,7 @@ if uploaded_files:
 	st.sidebar.write('Que tipos de gráfico desea generar: ')
 	cnt=st.sidebar.checkbox('Contour')
 	srf=st.sidebar.checkbox('Surface')
-	no_plots=cnt and srf
+	no_plots=not(cnt and srf)
 
 	if st.sidebar.button('Generar gráficos'):
 		plt.rcParams.update(
@@ -54,6 +54,7 @@ if uploaded_files:
 				ax_cont[n].set_xlabel(r"$\lambda $ de emisión")
 				ax_cont[n].set_ylabel(r"$\lambda $ de excitación")
 				ax_cont[n].set_title(titulos_graficos[n])
+			plt.tight_layout()
 			plot = st.pyplot(fig_cont)
 		if srf:
 			fig_srf= plt.Figure(figsize= figsize)
@@ -63,12 +64,13 @@ if uploaded_files:
 				ax_srf.plot_surface(*tuple, cmap='plasma')
 				ax_srf.set_xlabel(r"$\lambda $ de emisión")
 				ax_srf.set_ylabel(r"$\lambda $ de excitación")
-
+			plt.tight_layout()
 			plot = st.pyplot(fig_srf)
 		if no_plots:
 			img=Image.open('quedesea.jpeg')
 			fig,ax=plt.subplots(1,1,figsize=(20,15))
 			ax.imshow(img)
+			plt.axes('off')
 			plot=st.pyplot(fig)
 
 
