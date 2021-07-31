@@ -2,6 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import pandas as pd
 from PIL import Image
+from download import main as download
 from pandas_to_np import main as conv2array
 import numpy as np
 
@@ -65,7 +66,7 @@ if uploaded_files:
 		nrows=int(np.ceil(nplots/3))
 		figsize=20*nplots,15*(int(np.ceil(nplots/3)))
 		if cnt:
-			fig_cont, ax_cont = plt.subplots(ncols= len(dataframes), nrows=nrows,figsize=figsize, dpi=400)
+			fig_cont, ax_cont = plt.subplots(ncols= len(dataframes), nrows=nrows,figsize=figsize, dpi=250)
 			if len(arrays)>1:
 				ax_con=ax_cont.flatten()
 			else:
@@ -76,18 +77,21 @@ if uploaded_files:
 				ax_cont[n].set_ylabel(r"$\lambda $ de excitación")
 				ax_cont[n].set_title(titulos_graficos[n])
 			plt.tight_layout()
+	
 			plot = st.pyplot(fig_cont)
+			down_cont=download(fig_cont)
 		if srf:
-			fig_srf= plt.Figure(figsize= figsize, dpi=400)
+			fig_srf= plt.Figure(figsize= figsize, dpi=250)
 		
 			for n,tuple in enumerate(arrays):
 				ax_srf=fig_srf.add_subplot(int('{}{}{}'.format(nrows, len(dataframes),n+1 )), projection='3d')
 				ax_srf.view_init(altura, az)
-				ax_srf.plot_surface(*tuple, cmap='plasma')
+				ax_srf.plot_surface(*tuple, cmap=cmap)
 				ax_srf.set_xlabel(r"$\lambda $ de emisión")
 				ax_srf.set_ylabel(r"$\lambda $ de excitación")
 			plt.tight_layout()
 			plot = st.pyplot(fig_srf)
+			down_srf=download(fig_srf)
 		if no_plots:
 			st.subheader('No se seleccionó ningún tipo de gráfico! ')
 			img=Image.open('quedesea.jpeg')
