@@ -70,7 +70,7 @@ if uploaded_files:
 			img=Image.open('quedesea.jpeg')
 			fig,ax=plt.subplots(1,1,figsize=(20,15))
 			ax.imshow(img)
-			plt.axes('off')
+			plt.axis('off')
 			plot=st.pyplot(fig)
 
 
