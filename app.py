@@ -28,7 +28,7 @@ if uploaded_files:
 	st.sidebar.write('Que tipos de gráfico desea generar: ')
 	cnt=st.sidebar.checkbox('Contour')
 	srf=st.sidebar.checkbox('Surface')
-	no_plots=not(cnt and srf)
+	no_plots=not(cnt or srf)
 
 	if st.sidebar.button('Generar gráficos'):
 		plt.rcParams.update(
