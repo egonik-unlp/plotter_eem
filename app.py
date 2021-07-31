@@ -82,7 +82,7 @@ if uploaded_files:
 		
 			for n,tuple in enumerate(arrays):
 				ax_srf=fig_srf.add_subplot(int('{}{}{}'.format(nrows, len(dataframes),n+1 )), projection='3d')
-				ax_srf.view_init(az,altura)
+				ax_srf.view_init(altura, az)
 				ax_srf.plot_surface(*tuple, cmap='plasma')
 				ax_srf.set_xlabel(r"$\lambda $ de emisión")
 				ax_srf.set_ylabel(r"$\lambda $ de excitación")
