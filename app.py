@@ -67,6 +67,7 @@ if uploaded_files:
 			plt.tight_layout()
 			plot = st.pyplot(fig_srf)
 		if no_plots:
+			st.subheader('No se seleccionó ningún tipo de gráfico! ')
 			img=Image.open('quedesea.jpeg')
 			fig,ax=plt.subplots(1,1,figsize=(20,15))
 			ax.imshow(img)
