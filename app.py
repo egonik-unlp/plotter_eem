@@ -92,7 +92,6 @@ if uploaded_files:
 			plot = st.pyplot(fig_cont)
 			down_cont=download(fig_cont)
 		if srf:
-			ncols=min((4, len(dataframes)))
 			fig_srf, ax_srf= plt.subplots(ncols=ncols, nrows=nrows,figsize= figsize_srf, dpi=250,tight_layout=True, subplot_kw={'projection':'3d'})
 			ax_srf=ax_srf.flatten()
 			for n,tuple in enumerate(arrays):
