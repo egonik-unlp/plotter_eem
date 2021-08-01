@@ -24,7 +24,7 @@ uploaded_files= st.sidebar.file_uploader(
 	accept_multiple_files=True
 	)
 if uploaded_files:
-	titulos_graficos=['grafico {}'.format(i) for i in range(len(uploaded_files)) ]
+	titulos_graficos=['grafico  {}'.format(file.name) for file in uploaded_files ]
 	uploaded_files=list(uploaded_files)
 	st.sidebar.write('Que tipos de gráfico desea generar: ')
 	cnt=st.sidebar.checkbox('Contour')
@@ -44,31 +44,40 @@ if uploaded_files:
 				except ValueError:
 					print('Solo se aceptan valores numericos')
 					az=alt=30.0
-			cmap=st.selectbox('Mapa de colores',[ 'plasma',' viridis', 'copper', 'jet', 'inferno'])
+			cmap=st.selectbox('Mapa de colores',[ 'plasma',' cividis', 'copper', 'jet', 'inferno'])
 			submit = st.form_submit_button('Generar Gráficos')
+
+		# with st.form(key='form2'):
+			
+		# 	cambio= st.form_submit_button('Modificar Título')
+
+
 
 
 
 	if submit:
-		
+		plt.style.use('ggplot')
 		plt.rcParams.update(
 			{ 
-				'font.size':80
+				'font.size':21
 			}
 		)
-		plt.style.use('ggplot')
+		
 		
 		dataframes=[pd.read_csv(file) for file in uploaded_files]
 		# st.write(dataframes[0])
 		arrays=[conv2array(file) for file in dataframes]
 		# st.write(type(arrays[0]))
 		nplots=len(arrays)
+		ncols=3
 		nrows=int(np.ceil(nplots/3))
-		figsize=20*nplots,15*(int(np.ceil(nplots/3)))
+		figsize_cnt=18*nplots,15*(int(np.ceil(nplots/3)))				
+		figsize_srf=30*nplots,15*(int(np.ceil(nplots/3)))
+
 		if cnt:
-			fig_cont, ax_cont = plt.subplots(ncols= len(dataframes), nrows=nrows,figsize=figsize, dpi=250)
+			fig_cont, ax_cont = plt.subplots(ncols= ncols, nrows=nrows,figsize=figsize_cnt, dpi=250)
 			if len(arrays)>1:
-				ax_con=ax_cont.flatten()
+				ax_cont=ax_cont.flatten()
 			else:
 				ax_cont=np.array([ax_cont])
 			for n,tuple in enumerate(arrays):
@@ -81,15 +90,15 @@ if uploaded_files:
 			plot = st.pyplot(fig_cont)
 			down_cont=download(fig_cont)
 		if srf:
-			fig_srf= plt.Figure(figsize= figsize, dpi=250)
+			fig_srf= plt.Figure(figsize= figsize_srf, dpi=250,tight_layout=True)
 		
 			for n,tuple in enumerate(arrays):
-				ax_srf=fig_srf.add_subplot(int('{}{}{}'.format(nrows, len(dataframes),n+1 )), projection='3d')
+				ax_srf=fig_srf.add_subplot(int('{}{}{}'.format(nrows, ncols,n+1 )), projection='3d')
 				ax_srf.view_init(altura, az)
 				ax_srf.plot_surface(*tuple, cmap=cmap)
 				ax_srf.set_xlabel(r"$\lambda $ de emisión (nm)")
 				ax_srf.set_ylabel(r"$\lambda $ de excitación (nm)")
-			plt.tight_layout()
+			# plt.tight_layout()
 			plot = st.pyplot(fig_srf)
 			down_srf=download(fig_srf)
 		if no_plots:
