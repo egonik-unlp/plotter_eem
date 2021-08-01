@@ -71,8 +71,8 @@ if uploaded_files:
 		nplots=len(arrays)
 		ncols=min([3, len(dataframes)])
 		nrows=int(np.ceil(nplots/3))
-		figsize_cnt=10*ncols,8*nrows				
-		figsize_srf=8*nplots,10*(int(np.ceil(nplots/3)))
+		figsize_cnt=10*ncols,8*nrows				  ###
+		figsize_srf=8*ncols,10*(int(np.ceil(nplots/3))) ###
 
 		if cnt:
 			fig_cont, ax_cont = plt.subplots(ncols= ncols, nrows=nrows,figsize=figsize_cnt, dpi=250)
@@ -84,7 +84,7 @@ if uploaded_files:
 				ax_cont[n].contourf(*tuple, cmap=cmap)
 				ax_cont[n].set_xlabel(r"$\lambda $ de emisión (nm)")
 				ax_cont[n].set_ylabel(r"$\lambda $ de excitación (nm)")
-				ax_cont[n].set_title(titulos_graficos[n])
+				ax_cont[n].set_title(titulos_graficos[n][:-4])
 			for extra_n in range(len(arrays), (nrows*ncols)):
 				ax_cont[extra_n].set_axis_off()
 			plt.tight_layout()
@@ -99,6 +99,7 @@ if uploaded_files:
 				ax_srf[n].plot_surface(*tuple, cmap=cmap)
 				ax_srf[n].set_xlabel(r"$\lambda $ de emisión (nm)")
 				ax_srf[n].set_ylabel(r"$\lambda $ de excitación (nm)")
+				ax_srf[n].set_title(titulos_graficos[n][:-4])
 			for extra_n in range(len(arrays), (nrows*ncols)):
 				ax_srf[extra_n].set_axis_off()
 				ax_srf[extra_n].patch.set_visible(False)
