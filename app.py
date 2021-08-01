@@ -38,13 +38,13 @@ if uploaded_files:
 		with st.form(key='form1'):
 			if srf:
 				try:
-					az=float(st.text_input('Ángulo azimutal ', '30'))
-					altura=float(st.text_input('Altura', '30'))
+					az=float(st.text_input('Ángulo azimutal ', '35'))
+					altura=float(st.text_input('Altura', '25'))
 					asignado='flapo'
 				except ValueError:
 					print('Solo se aceptan valores numericos')
 					az=alt=30.0
-			cmap=st.selectbox('Mapa de colores',[ 'plasma',' cividis', 'copper', 'jet', 'inferno'])
+			cmap=st.selectbox('Mapa de colores',[ 'plasma','cividis', 'copper', 'jet', 'inferno', 'viridis', 'winter', 'gnuplot'])
 			submit = st.form_submit_button('Generar Gráficos')
 
 		# with st.form(key='form2'):
@@ -59,7 +59,7 @@ if uploaded_files:
 		plt.style.use('ggplot')
 		plt.rcParams.update(
 			{ 
-				'font.size':21
+				'font.size':12
 			}
 		)
 		
@@ -69,10 +69,10 @@ if uploaded_files:
 		arrays=[conv2array(file) for file in dataframes]
 		# st.write(type(arrays[0]))
 		nplots=len(arrays)
-		ncols=3
+		ncols=min([3, len(dataframes)])
 		nrows=int(np.ceil(nplots/3))
-		figsize_cnt=18*nplots,15*(int(np.ceil(nplots/3)))				
-		figsize_srf=30*nplots,15*(int(np.ceil(nplots/3)))
+		figsize_cnt=10*ncols,8*nrows				
+		figsize_srf=8*nplots,10*(int(np.ceil(nplots/3)))
 
 		if cnt:
 			fig_cont, ax_cont = plt.subplots(ncols= ncols, nrows=nrows,figsize=figsize_cnt, dpi=250)
@@ -85,19 +85,24 @@ if uploaded_files:
 				ax_cont[n].set_xlabel(r"$\lambda $ de emisión (nm)")
 				ax_cont[n].set_ylabel(r"$\lambda $ de excitación (nm)")
 				ax_cont[n].set_title(titulos_graficos[n])
+			for extra_n in range(len(arrays), (nrows*ncols)):
+				ax_cont[extra_n].set_axis_off()
 			plt.tight_layout()
 	
 			plot = st.pyplot(fig_cont)
 			down_cont=download(fig_cont)
 		if srf:
-			fig_srf= plt.Figure(figsize= figsize_srf, dpi=250,tight_layout=True)
-		
+			ncols=min((4, len(dataframes)))
+			fig_srf, ax_srf= plt.subplots(ncols=ncols, nrows=nrows,figsize= figsize_srf, dpi=250,tight_layout=True, subplot_kw={'projection':'3d'})
+			ax_srf=ax_srf.flatten()
 			for n,tuple in enumerate(arrays):
-				ax_srf=fig_srf.add_subplot(int('{}{}{}'.format(nrows, ncols,n+1 )), projection='3d')
-				ax_srf.view_init(altura, az)
-				ax_srf.plot_surface(*tuple, cmap=cmap)
-				ax_srf.set_xlabel(r"$\lambda $ de emisión (nm)")
-				ax_srf.set_ylabel(r"$\lambda $ de excitación (nm)")
+				ax_srf[n].view_init(altura, az)
+				ax_srf[n].plot_surface(*tuple, cmap=cmap)
+				ax_srf[n].set_xlabel(r"$\lambda $ de emisión (nm)")
+				ax_srf[n].set_ylabel(r"$\lambda $ de excitación (nm)")
+			for extra_n in range(len(arrays), (nrows*ncols)):
+				ax_srf[extra_n].set_axis_off()
+				ax_srf[extra_n].patch.set_visible(False)
 			# plt.tight_layout()
 			plot = st.pyplot(fig_srf)
 			down_srf=download(fig_srf)
